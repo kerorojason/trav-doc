@@ -37,5 +37,5 @@ const wss = new WebSocket.Server({ server });
 addEventHandlers(wss);
 
 server.listen(PORT, () => {
-  console.log(`listening on http://localhost:${PORT}`);
+  console.log(`Listening on http://localhost:${PORT}`);
 });

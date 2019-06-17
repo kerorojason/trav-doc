@@ -2,20 +2,62 @@ import React from 'react';
 import { unstable_deferredUpdates as deferredUpdates } from 'react-dom';
 
 import PropTypes from 'prop-types';
-import { EditorState, convertToRaw, RichUtils } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
+import { EditorState, convertToRaw, convertFromRaw, RichUtils } from 'draft-js';
+import Editor, { composeDecorators } from 'draft-js-plugins-editor';
 
 import debounce from 'debounce';
 import { getCursorStyle } from './getCursorStyle';
 import { applyDelta } from './applyDelta';
 
 import './Editor.scss';
-import * as richStyleHelpers from './richStyle';
+import * as richStyleHelpers from './richStyle/helper';
 import BlockStyleControls from './richStyle/BlockStyleControls';
 import InlineStyleControls from './richStyle/InlineStyleControls';
+import initialState from './richStyle/initialState';
+
+import 'draft-js-image-plugin/lib/plugin.css';
+import 'draft-js-focus-plugin/lib/plugin.css';
 
 import createHighlightPlugin from './plugins/highlightPlugin';
+// import createAlignmentPlugin from 'draft-js-alignment-plugin';
+import createImagePlugin from 'draft-js-image-plugin';
+import createResizeablePlugin from 'draft-js-resizeable-plugin';
+import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin';
+import createFocusPlugin from 'draft-js-focus-plugin';
+// import createDragNDropUploadPlugin from 'draft-js-drag-n-drop-upload-plugin';
+import createDragNDropUploadPlugin from '@mikeljames/draft-js-drag-n-drop-upload-plugin';
+import mockUpload from './mockUpload';
+
 const highlightPlugin = createHighlightPlugin();
+const focusPlugin = createFocusPlugin();
+const resizeablePlugin = createResizeablePlugin();
+const blockDndPlugin = createBlockDndPlugin();
+// const alignmentPlugin = createAlignmentPlugin();
+// const { AlignmentTool } = alignmentPlugin;
+
+const decorator = composeDecorators(
+  resizeablePlugin.decorator,
+  // alignmentPlugin.decorator,
+  focusPlugin.decorator,
+  blockDndPlugin.decorator
+);
+
+const imagePlugin = createImagePlugin({ decorator });
+
+const dragNDropFileUploadPlugin = createDragNDropUploadPlugin({
+  handleUpload: mockUpload,
+  addImage: imagePlugin.addImage
+});
+
+const plugins = [
+  dragNDropFileUploadPlugin,
+  blockDndPlugin,
+  focusPlugin,
+  // alignmentPlugin,
+  resizeablePlugin,
+  imagePlugin,
+  highlightPlugin
+];
 
 class CollaborativeEditor extends React.Component {
   static propTypes = {
@@ -27,7 +69,8 @@ class CollaborativeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty(),
+      // editorState: EditorState.createEmpty(),
+      editorState: EditorState.createWithContent(convertFromRaw(initialState)),
       customStyleMap: {},
       cursors: []
     };
@@ -38,7 +81,7 @@ class CollaborativeEditor extends React.Component {
       this.setState({ editorState });
     };
 
-    this.plugins = [highlightPlugin];
+    // this.plugins = [highlightPlugin, imagePlugin];
   }
 
   _isUnmounted = false;
@@ -78,12 +121,12 @@ class CollaborativeEditor extends React.Component {
       this.handleMessage(JSON.parse(event.data));
     };
 
-    window.addEventListener('resize', this.resize);
+    // window.addEventListener('resize', this.resize);
   }
 
   componentWillUnmount() {
     this._isUnmounted = true;
-    window.removeEventListener('resize', this.resize);
+    // window.removeEventListener('resize', this.resize);
   }
 
   resize = debounce(evt => {
@@ -130,6 +173,7 @@ class CollaborativeEditor extends React.Component {
     );
     this.setState({ editorState: nextEditorState });
   };
+
   handleKeyCommand = richStyleHelpers.handleKeyCommand.bind(this);
   onTab = richStyleHelpers.onTab.bind(this);
   toggleBlockType = richStyleHelpers.toggleBlockType.bind(this);
@@ -176,7 +220,7 @@ class CollaborativeEditor extends React.Component {
             onTab={this.onTab}
             placeholder='Tell a story...'
             spellCheck={true}
-            plugins={this.plugins}
+            plugins={plugins}
             ref='editor'
             {...rest}
           />
