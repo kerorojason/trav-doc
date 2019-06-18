@@ -17,8 +17,10 @@ import initialState from './richStyle/initialState';
 
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js-focus-plugin/lib/plugin.css';
+import 'draft-js-mention-plugin/lib/plugin.css';
 
 import createHighlightPlugin from './plugins/highlightPlugin';
+import createAddSitePlugin from './plugins/addSitePlugin';
 import createImagePlugin from 'draft-js-image-plugin';
 import createResizeablePlugin from 'draft-js-resizeable-plugin';
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin';
@@ -26,6 +28,7 @@ import createFocusPlugin from 'draft-js-focus-plugin';
 import createDragNDropUploadPlugin from '@mikeljames/draft-js-drag-n-drop-upload-plugin';
 import mockUpload from './mockUpload';
 
+const addSitePlugin = createAddSitePlugin();
 const highlightPlugin = createHighlightPlugin();
 const focusPlugin = createFocusPlugin();
 const resizeablePlugin = createResizeablePlugin();
@@ -50,7 +53,8 @@ const plugins = [
   focusPlugin,
   resizeablePlugin,
   imagePlugin,
-  highlightPlugin
+  highlightPlugin,
+  addSitePlugin
 ];
 
 class CollaborativeEditor extends React.Component {
@@ -73,8 +77,6 @@ class CollaborativeEditor extends React.Component {
       this.broadcast();
       this.setState({ editorState });
     };
-
-    // this.plugins = [highlightPlugin, imagePlugin];
   }
 
   _isUnmounted = false;
@@ -190,7 +192,6 @@ class CollaborativeEditor extends React.Component {
         className += ' Editor-hidePlaceholder';
       }
     }
-
     return (
       <div className='Editor-root'>
         <BlockStyleControls

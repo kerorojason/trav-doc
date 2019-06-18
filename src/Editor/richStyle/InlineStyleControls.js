@@ -6,7 +6,8 @@ var INLINE_STYLES = [
   { label: 'Italic', style: 'ITALIC' },
   { label: 'Underline', style: 'UNDERLINE' },
   { label: 'Monospace', style: 'CODE' },
-  { label: 'Highlight', style: 'highlight' }
+  { label: 'Highlight', style: 'highlight' },
+  { label: 'Add Site', style: 'ADDSITE' }
 ];
 
 const InlineStyleControls = props => {
