@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import 'draft-js/dist/Draft.css';
-import { Editor } from '../src';
+import CollaborativeEditor from '../src/Editor/Editor';
 import GoogleMap from '../src/GoogleMap/GoogleMap';
 //let host = process.env.NODE_ENV !== 'production'
 //  ? 'ws://' + window.document.location.host.replace(/:.*/, '') + ':1234'
@@ -33,7 +33,11 @@ class App extends React.Component {
       <div className={'container'}>
         {/* <div className={'row'}>
           <div className={'column'} style={{ padding: '1em' }}> */}
-        <Editor autoFocus ws={this.ws} userId={this.state.userId} />
+        <CollaborativeEditor
+          autoFocus
+          ws={this.ws}
+          userId={this.state.userId}
+        />
         <GoogleMap />
         {/* </div>
         </div> */}
