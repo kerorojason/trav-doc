@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import 'draft-js/dist/Draft.css';
 import CollaborativeEditor from '../src/Editor/Editor';
-import GoogleMap from '../src/GoogleMap/GoogleMap';
+import Searchbox from '../src/GoogleMap/Searchbox';
 //let host = process.env.NODE_ENV !== 'production'
 //  ? 'ws://' + window.document.location.host.replace(/:.*/, '') + ':1234'
 //  : window.location.origin.replace(/^http/, 'ws')
@@ -38,7 +38,7 @@ class App extends React.Component {
           ws={this.ws}
           userId={this.state.userId}
         />
-        <GoogleMap />
+        <Searchbox />
         {/* </div>
         </div> */}
       </div>
