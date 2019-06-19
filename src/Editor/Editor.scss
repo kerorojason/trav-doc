@@ -7,8 +7,9 @@
     padding: 15px;
     // margin-top: 20px;
     box-sizing: border-box;
-    min-height: 95vh;
+    height: 95vh;
     width: 50%;
+    overflow-y: scroll;
   }
 
   &-editor {
