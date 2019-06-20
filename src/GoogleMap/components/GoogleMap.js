@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{Component}from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import GoogleMapReact from 'google-map-react';
@@ -8,6 +8,7 @@ const Wrapper = styled.main`
   height: 100%;
   position:absolute;
 `;
+
 
 const GoogleMap = ({ children, ...props }) => (
   <Wrapper>

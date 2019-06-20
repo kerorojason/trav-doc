@@ -27,6 +27,11 @@
     "standard": "^11.0.1"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-brands-svg-icons": "^5.9.0",
+    "@fortawesome/free-regular-svg-icons": "^5.9.0",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",

@@ -1,0 +1,80 @@
+.TravMap_div {
+    width: 50%;
+    height: 95vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.SearchBox_div {
+    height: 10%;
+    width: 10%;
+    display: flex;
+    flex-direction: column-reverse;
+    position: absolute;
+    z-index: 1;
+}
+
+.Button {
+    height: 40px;
+    width: 40px;
+    border-radius: 2px;
+    user-select: none;
+    cursor: pointer;
+    border: 0px;
+    // margin: 10px;
+    padding: 0px;
+    position: absolute;
+    right: 0px;
+    top: 20%;
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 2;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 2px #a8a7a7;
+}
+
+.Button:focus {
+    outline: 0;
+    border: none;
+}
+
+.sidebar {
+    height: 100%;
+    width: 40%;
+    position: absolute;
+    left: 100%;
+    top: 0px;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: all .25s;
+}
+
+.sidebar--open {
+    transform: translateX(-100%)
+}
+
+.sidebar__context {
+    overflow: hidden;
+    background-color: white;
+    z-index: 3;
+    width: 100%;
+    border: 10px;
+    margin: 10px;
+    padding: 0px;
+    top: 0px;
+}
+
+.Icon_slide {
+    color: gray;
+}
+
+.Icon_slide:hover {
+    color: #3d3b3b;
+}
