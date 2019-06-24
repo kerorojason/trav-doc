@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  position: relative;
+  position: absolute;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -17,8 +17,8 @@ class SearchBox extends Component {
 
   componentDidMount({ map, mapApi } = this.props) {
     this.searchBox = new mapApi.places.SearchBox(this.searchInput);
-    this.searchBox.addListener('places_changed', this.onPlacesChanged);
-    this.searchBox.bindTo('bounds', map);
+    this.searchBox.addListener("places_changed", this.onPlacesChanged);
+    this.searchBox.bindTo("bounds", map);
   }
 
   componentWillUnmount({ mapApi } = this.props) {
@@ -27,10 +27,10 @@ class SearchBox extends Component {
 
   onPlacesChanged = ({ map, addplace } = this.props) => {
     const selected = this.searchBox.getPlaces();
-    if (selected.length > 0){
+    if (selected.length > 0) {
       const { 0: place } = selected;
-     
-      if (!place.geometry) return ;
+
+      if (!place.geometry) return;
       if (place.geometry.viewport) {
         map.fitBounds(place.geometry.viewport);
       } else {
@@ -40,27 +40,26 @@ class SearchBox extends Component {
 
       addplace(selected);
       this.searchInput.blur();
-    };
+    }
     //console.log("SearchBox :",selected);
-    
-    
-  }
+  };
 
   clearSearchBox() {
-      this.searchInput.value = '';
-      }
+    this.searchInput.value = "";
+  }
   render() {
     return (
-      <Wrapper>
-        <input
-          ref={(ref) => {
-            this.searchInput = ref;
-          }}
-          type="text"
-          onFocus={this.clearSearchBox}
-          placeholder="Enter a location"
-        />
-      </Wrapper>
+      //<Wrapper>
+      <input
+        style={{ width: "90%" }}
+        ref={ref => {
+          this.searchInput = ref;
+        }}
+        type="text"
+        onFocus={this.clearSearchBox}
+        placeholder="Enter a location"
+      />
+      //</Wrapper>
     );
   }
 }

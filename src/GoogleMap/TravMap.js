@@ -1,15 +1,21 @@
 import React, { Component, Fragment } from "react";
 import isEmpty from "lodash.isempty";
+import PropTypes from "prop-types";
+
+// TravMap 總體格式
+import "./TravMap.scss";
 
 // components:
 import Marker from "./components/Marker";
-import "./TravMap.scss";
 import SideBar from "./components/SideBar";
-// examples:
 import GoogleMap from "./components/GoogleMap";
 import SearchBox from "./components/SearchBox";
+import InfoWindow from "./components/InfoWindow";
+import AddMarker from "./components/AddMarker";
+
+// Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
+import { faSearchLocation } from "@fortawesome/free-solid-svg-icons";
 
 class TravMap extends Component {
   constructor(props) {
@@ -19,13 +25,15 @@ class TravMap extends Component {
       mapApiLoaded: false,
       mapInstance: null,
       mapApi: null,
-      places: [],
+      searchPlaces: [],
       user_center: [25.0195235, 121.54840689999999],
-      button_folded: true
+      button_folded: true,
+      userAddPlaces: []
     };
   }
+
   // 找尋使用者地點，使其googlemap到達其中心
-  componentDidMount() {
+  componentDidUpdate() {
     navigator.geolocation.getCurrentPosition(position => {
       //console.log(position.coords);
       this.setState({
@@ -34,6 +42,16 @@ class TravMap extends Component {
     });
   }
 
+  userAdd = place => {
+    const index = this.state.userAddPlaces;
+    //console.log(index.indexOf(place));
+    if (index.indexOf(place) === -1) {
+      index.push(place);
+      this.setState({ userAddPlaces: index });
+    }
+
+    //console.log(this.state.userAddPlaces);
+  };
   apiHasLoaded = (map, maps) => {
     this.setState({
       mapApiLoaded: true,
@@ -43,37 +61,49 @@ class TravMap extends Component {
   };
 
   addPlace = place => {
-    this.setState({ places: place });
-    console.log(this.state.places[0].formatted_address);
+    place.map(place => {
+      place.show = false;
+      if (place.opening_hours === undefined) {
+        place.opening_hours = { open_now: "None" };
+        //console.log(place);
+      }
+    });
+    this.setState({ searchPlaces: place });
+    //console.log(place.length);
   };
 
   buttonSlideState = () => {
     this.setState(state => ({ button_folded: !state.button_folded }));
-    // if (state.button_folded==="button_folded_out"){
-    //   this.setState({
-    //     button_folded: "button_folded_in"
-    //   });
-    // }else{
-    //   this.setState({
-    //     button_folded: "button_folded_out"
-    //   });
-    // }
+  };
+  // onChildClick callback can take two arguments: key and childProps
+  onChildClickCallback = key => {
+    this.setState(state => {
+      const index = state.searchPlaces.findIndex(e => e.place_id === key);
+      if (index >= 0) {
+        state.searchPlaces[index].show = !state.searchPlaces[index].show; // eslint-disable-line no-param-reassign
+        return { places: state.searchPlaces };
+      }
+    });
   };
 
   render() {
-    const { places, mapApiLoaded, mapInstance, mapApi, user_center, button_folded } = this.state;
+    const { userAddPlaces, searchPlaces, mapApiLoaded, mapInstance, mapApi, user_center, button_folded } = this.state;
     return (
       <div className="TravMap_div">
-        <div className="SearchBox_div">
-          {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />}
-        </div>
         <div className={"sidebar" + (button_folded ? "" : " sidebar--open")}>
-          <SideBar places={places} />
+          <div className="SearchBox_div">
+            {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />}
+          </div>
+          <SideBar places={userAddPlaces} />
         </div>
-        <button draggable="false" className="Button" onClick={this.buttonSlideState}>
+        <button
+          draggable="false"
+          className={"Button" + (button_folded ? "" : " Button--open")}
+          onClick={this.buttonSlideState}
+        >
           <FontAwesomeIcon
             className="Icon_slide"
-            icon={faAngleDoubleLeft}
+            icon={faSearchLocation}
             style={{
               position: "absolute",
               top: "7px",
@@ -94,14 +124,26 @@ class TravMap extends Component {
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
           // style={{position:'relative'}}
+          onChildClick={this.onChildClickCallback}
         >
-          {!isEmpty(places) &&
-            places.map(place => (
+          {!isEmpty(userAddPlaces) &&
+            userAddPlaces.map(place => (
               <Marker
-                key={place.id}
+                key={place.place_id}
                 text={place.name}
                 lat={place.geometry.location.lat()}
                 lng={place.geometry.location.lng()}
+              />
+            ))}
+          {!isEmpty(searchPlaces) &&
+            searchPlaces.map(place => (
+              <AddMarker
+                key={place.place_id}
+                lat={place.geometry.location.lat()}
+                lng={place.geometry.location.lng()}
+                show={place.show}
+                place={place}
+                useradd={this.userAdd}
               />
             ))}
         </GoogleMap>
@@ -109,5 +151,28 @@ class TravMap extends Component {
     );
   }
 }
+
+InfoWindow.propTypes = {
+  place: PropTypes.shape({
+    name: PropTypes.string,
+    formatted_address: PropTypes.string,
+    rating: PropTypes.number,
+    types: PropTypes.array,
+    price_level: PropTypes.number,
+    opening_hours: PropTypes.object
+  }).isRequired
+};
+
+AddMarker.propTypes = {
+  show: PropTypes.bool.isRequired,
+  place: PropTypes.shape({
+    name: PropTypes.string,
+    formatted_address: PropTypes.string,
+    rating: PropTypes.number,
+    types: PropTypes.array,
+    price_level: PropTypes.number,
+    opening_hours: PropTypes.object
+  }).isRequired
+};
 
 export default TravMap;
