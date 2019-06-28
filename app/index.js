@@ -48,7 +48,6 @@ class App extends React.Component {
           userAddPlaces={this.state.userAddPlaces}
           handleSelectPlace={place => {
             this.setState({ focusedPlace: place });
-            console.log(place);
           }}
         />
         <TravMap
