@@ -6,7 +6,7 @@ body {
   width: 95%;
   margin: 1em auto;
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
 .column {

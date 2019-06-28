@@ -2,3 +2,5 @@ dist
 node_modules
 .cache
 .env.development
+package-lock.json
+.env

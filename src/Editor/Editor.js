@@ -31,23 +31,12 @@ import createMentionPlugin, {
 } from 'draft-js-mention-plugin';
 
 import mockUpload from './mockUpload';
-import mentions from './mentions';
+// import mentions from './mentions';
 
 const highlightPlugin = createHighlightPlugin();
 const focusPlugin = createFocusPlugin();
 const resizeablePlugin = createResizeablePlugin();
 const blockDndPlugin = createBlockDndPlugin();
-const mentionPlugin = createMentionPlugin({
-  mentions,
-  mentionComponent: mentionProps => (
-    <span
-      className={mentionProps.className}
-      onClick={() => alert(mentionProps.mention.name + ' clicked!')}
-    >
-      {mentionProps.children}
-    </span>
-  )
-});
 
 const decorator = composeDecorators(
   resizeablePlugin.decorator,
@@ -65,10 +54,8 @@ const plugins = [
   focusPlugin,
   resizeablePlugin,
   imagePlugin,
-  highlightPlugin,
-  mentionPlugin
+  highlightPlugin
 ];
-const { MentionSuggestions } = mentionPlugin;
 
 class CollaborativeEditor extends React.Component {
   static propTypes = {
@@ -83,7 +70,8 @@ class CollaborativeEditor extends React.Component {
       editorState: EditorState.createEmpty(),
       customStyleMap: {},
       cursors: [],
-      suggestions: mentions
+      suggestions: this.props.userAddPlaces,
+      selectedPlace: {}
     };
 
     this.focus = () => this.refs.editor.focus();
@@ -91,6 +79,20 @@ class CollaborativeEditor extends React.Component {
       this.broadcast();
       this.setState({ editorState });
     };
+    this.mentionPlugin = createMentionPlugin({
+      mentions: this.props.userAddPlaces,
+      mentionComponent: mentionProps => (
+        <span
+          className={mentionProps.className}
+          onClick={() => {
+            this.setState({ selectedPlace: mentionProps.mention });
+            console.log(mentionProps.mention);
+          }}
+        >
+          {mentionProps.children}
+        </span>
+      )
+    });
   }
 
   _isUnmounted = false;
@@ -189,7 +191,8 @@ class CollaborativeEditor extends React.Component {
   toggleInlineStyle = richStyleHelpers.toggleInlineStyle.bind(this);
   onSearchChange = ({ value }) => {
     this.setState({
-      suggestions: defaultSuggestionsFilter(value, mentions)
+      // suggestions: defaultSuggestionsFilter(value, mentions)
+      suggestions: defaultSuggestionsFilter(value, this.props.userAddPlaces)
     });
   };
 
@@ -200,7 +203,7 @@ class CollaborativeEditor extends React.Component {
   render() {
     const { cursors, editorState } = this.state;
     const { ws, userId, ...rest } = this.props;
-
+    const { MentionSuggestions } = this.mentionPlugin;
     // If the user changes block type before entering any text,
     // hide placeholder.
     let className = 'Editor-editor';
@@ -238,7 +241,7 @@ class CollaborativeEditor extends React.Component {
             onTab={this.onTab}
             placeholder="Let's plan a trip..."
             spellCheck={true}
-            plugins={plugins}
+            plugins={[...plugins, this.mentionPlugin]}
             ref='editor'
             {...rest}
           />

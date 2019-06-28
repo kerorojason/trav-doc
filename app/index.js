@@ -11,7 +11,9 @@ let host = window.location.origin.replace(/^http/, 'ws');
 
 class App extends React.Component {
   state = {
-    userId: undefined
+    userId: undefined,
+    userAddPlaces: [],
+    focusedPlace: {}
   };
 
   componentDidMount() {
@@ -27,6 +29,11 @@ class App extends React.Component {
     delete this.ws;
   }
 
+  handleAddPlaces = userAddPlaces => {
+    console.log(userAddPlaces);
+    this.setState({ userAddPlaces });
+  };
+
   render() {
     if (!this.state.userId) return false;
     return (
@@ -35,8 +42,13 @@ class App extends React.Component {
           autoFocus
           ws={this.ws}
           userId={this.state.userId}
+          userAddPlaces={this.state.userAddPlaces}
+          handleSelectPlace={place => this.setState({ focusedPlace: place })}
         />
-        <TravMap />
+        <TravMap
+          handleAddPlaces={this.handleAddPlaces}
+          focusedPlace={this.state.focusedPlace}
+        />
       </div>
     );
   }
