@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   entityMap: {
     '0': {
       type: 'IMAGE',

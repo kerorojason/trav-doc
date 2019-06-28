@@ -1,0 +1,35 @@
+.header {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-family: 'Georgia', serif;
+  &__input {
+    border: none;
+    width: 80%;
+    font-size: 30px;
+    font-weight: 450;
+    color: rgb(63, 63, 63);
+    font-family: 'Lobster', cursive;
+  }
+  &__save {
+    display: inline-block;
+    height: 30px;
+    padding: 0 14px;
+    text-transform: uppercase;
+    background-color: #1a73e8;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    &:hover {
+      cursor: pointer;
+    }
+    &:focus {
+      outline: 0;
+    }
+  }
+}

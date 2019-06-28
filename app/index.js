@@ -30,17 +30,13 @@ class App extends React.Component {
   render() {
     if (!this.state.userId) return false;
     return (
-      <div className={'container'}>
-        {/* <div className={'row'}>
-          <div className={'column'} style={{ padding: '1em' }}> */}
+      <div className='container'>
         <CollaborativeEditor
           autoFocus
           ws={this.ws}
           userId={this.state.userId}
         />
         <TravMap />
-        {/* </div>
-        </div> */}
       </div>
     );
   }
