@@ -42,25 +42,22 @@ class TravMap extends Component {
     });
   }
 
+  // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
-    const index = this.state.userAddPlaces;
+    const addIndex = this.state.userAddPlaces;
+    const searchIndex = this.state.searchPlaces;
+    const del = searchIndex.indexOf(place);
     //console.log(index.indexOf(place));
-    if (index.indexOf(place) === -1) {
-      index.push(place);
-      this.setState({ userAddPlaces: index });
+    if (addIndex.indexOf(place) === -1) {
+      addIndex.push(place);
+      searchIndex.splice(del, 1);
+      this.setState({ userAddPlaces: addIndex, searchPlaces: searchIndex });
     }
 
     //console.log(this.state.userAddPlaces);
   };
-  apiHasLoaded = (map, maps) => {
-    this.setState({
-      mapApiLoaded: true,
-      mapInstance: map,
-      mapApi: maps
-    });
-  };
-
-  addPlace = place => {
+  // 搜尋地點添加於地圖中(最多20個)
+  searchAdd = place => {
     place.map(place => {
       place.show = false;
       if (place.opening_hours === undefined) {
@@ -72,9 +69,20 @@ class TravMap extends Component {
     //console.log(place.length);
   };
 
+  // Google Map API 匯入
+  apiHasLoaded = (map, maps) => {
+    this.setState({
+      mapApiLoaded: true,
+      mapInstance: map,
+      mapApi: maps
+    });
+  };
+
+  // 側邊欄的狀態
   buttonSlideState = () => {
     this.setState(state => ({ button_folded: !state.button_folded }));
   };
+  // Inforwindow 是否開啟
   // onChildClick callback can take two arguments: key and childProps
   onChildClickCallback = key => {
     this.setState(state => {
@@ -92,7 +100,7 @@ class TravMap extends Component {
       <div className="TravMap_div">
         <div className={"sidebar" + (button_folded ? "" : " sidebar--open")}>
           <div className="SearchBox_div">
-            {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />}
+            {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} searchadd={this.searchAdd} />}
           </div>
           <SideBar places={userAddPlaces} />
         </div>
@@ -151,28 +159,5 @@ class TravMap extends Component {
     );
   }
 }
-
-InfoWindow.propTypes = {
-  place: PropTypes.shape({
-    name: PropTypes.string,
-    formatted_address: PropTypes.string,
-    rating: PropTypes.number,
-    types: PropTypes.array,
-    price_level: PropTypes.number,
-    opening_hours: PropTypes.object
-  }).isRequired
-};
-
-AddMarker.propTypes = {
-  show: PropTypes.bool.isRequired,
-  place: PropTypes.shape({
-    name: PropTypes.string,
-    formatted_address: PropTypes.string,
-    rating: PropTypes.number,
-    types: PropTypes.array,
-    price_level: PropTypes.number,
-    opening_hours: PropTypes.object
-  }).isRequired
-};
 
 export default TravMap;

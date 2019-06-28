@@ -6,7 +6,7 @@
 }
 
 .SearchBox_div {
-    height: 10%;
+    height: 60px;
     right: 0px;
     width: 100%;
     align-items: center;
@@ -15,6 +15,15 @@
     position: absolute;
     justify-content: center;
     z-index: 2;
+}
+
+.SearchBox_input {
+    width: 90%;
+    height: 35px;
+    outline: 0;
+    border: none;
+    border-radius: 90px;
+    box-shadow: 1px 1px 2px #a8a7a7;
 }
 
 .Button {
@@ -66,6 +75,7 @@
 
 .sidebar--open {
     transform: translateX(100%);
+    overflow: scroll;
 }
 
 .sidebar__context {
@@ -73,7 +83,7 @@
     background-color: white;
     position: absolute;
     z-index: 2;
-    top: 10%;
+    top: 60px;
     width: 100%;
     border: 0px;
     margin: 0px;

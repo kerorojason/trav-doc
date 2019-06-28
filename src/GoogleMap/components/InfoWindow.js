@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 
 // InfoWindow component
 const InfoWindow = props => {
@@ -31,4 +32,14 @@ const InfoWindow = props => {
   );
 };
 
+InfoWindow.propTypes = {
+  place: PropTypes.shape({
+    name: PropTypes.string,
+    formatted_address: PropTypes.string,
+    rating: PropTypes.number,
+    types: PropTypes.array,
+    price_level: PropTypes.number,
+    opening_hours: PropTypes.object
+  }).isRequired
+};
 export default InfoWindow;
