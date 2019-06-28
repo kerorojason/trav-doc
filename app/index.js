@@ -30,7 +30,10 @@ class App extends React.Component {
   }
 
   handleAddPlaces = userAddPlaces => {
-    console.log(userAddPlaces);
+    userAddPlaces = userAddPlaces.map(place => ({
+      ...place,
+      avatar: place.icon
+    }));
     this.setState({ userAddPlaces });
   };
 
@@ -43,7 +46,10 @@ class App extends React.Component {
           ws={this.ws}
           userId={this.state.userId}
           userAddPlaces={this.state.userAddPlaces}
-          handleSelectPlace={place => this.setState({ focusedPlace: place })}
+          handleSelectPlace={place => {
+            this.setState({ focusedPlace: place });
+            console.log(place);
+          }}
         />
         <TravMap
           handleAddPlaces={this.handleAddPlaces}

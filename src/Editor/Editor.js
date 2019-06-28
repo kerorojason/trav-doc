@@ -84,10 +84,7 @@ class CollaborativeEditor extends React.Component {
       mentionComponent: mentionProps => (
         <span
           className={mentionProps.className}
-          onClick={() => {
-            this.setState({ selectedPlace: mentionProps.mention });
-            console.log(mentionProps.mention);
-          }}
+          onClick={() => this.props.handleSelectPlace(mentionProps.mention)}
         >
           {mentionProps.children}
         </span>
