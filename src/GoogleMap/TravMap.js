@@ -1,21 +1,21 @@
-import React, { Component, Fragment } from 'react';
-import isEmpty from 'lodash.isempty';
-import PropTypes from 'prop-types';
+import React, { Component, Fragment } from "react";
+import isEmpty from "lodash.isempty";
+import PropTypes from "prop-types";
 
 // TravMap 總體格式
-import './TravMap.scss';
+import "./TravMap.scss";
 
 // components:
-import Marker from './components/Marker';
-import SideBar from './components/SideBar';
-import GoogleMap from './components/GoogleMap';
-import SearchBox from './components/SearchBox';
-import InfoWindow from './components/InfoWindow';
-import AddMarker from './components/AddMarker';
+import Marker from "./components/Marker";
+import SideBar from "./components/SideBar";
+import GoogleMap from "./components/GoogleMap";
+import SearchBox from "./components/SearchBox";
+import InfoWindow from "./components/InfoWindow";
+import AddMarker from "./components/AddMarker";
 
 // Icon
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearchLocation } from "@fortawesome/free-solid-svg-icons";
 
 class TravMap extends Component {
   constructor(props) {
@@ -33,13 +33,25 @@ class TravMap extends Component {
   }
 
   // 找尋使用者地點，使其googlemap到達其中心
-  componentDidUpdate() {
+  componentDidMount() {
     navigator.geolocation.getCurrentPosition(position => {
       //console.log(position.coords);
       this.setState({
         user_center: [position.coords.latitude, position.coords.longitude]
       });
     });
+  }
+
+  // 點擊@後的location，能讓地點在地圖正中間
+  componentWillReceiveProps(nextProps) {
+    const nowCenter = this.state.mapInstance.getCenter();
+    if (nextProps.focusedPlace.geometry) {
+      const location = nextProps.focusedPlace.geometry.location;
+      if (nowCenter !== location) {
+        this.state.mapInstance.setCenter(location);
+        this.state.mapInstance.setZoom(17);
+      }
+    }
   }
 
   // 使用者添加自定義地點於地圖列表中
@@ -60,7 +72,7 @@ class TravMap extends Component {
     place.map(place => {
       place.show = false;
       if (place.opening_hours === undefined) {
-        place.opening_hours = { open_now: 'None' };
+        place.opening_hours = { open_now: "None" };
         //console.log(place);
       }
     });
@@ -94,43 +106,29 @@ class TravMap extends Component {
   };
 
   render() {
-    const {
-      userAddPlaces,
-      searchPlaces,
-      mapApiLoaded,
-      mapInstance,
-      mapApi,
-      user_center,
-      button_folded
-    } = this.state;
+    const { userAddPlaces, searchPlaces, mapApiLoaded, mapInstance, mapApi, user_center, button_folded } = this.state;
     return (
-      <div className='TravMap_div'>
-        <div className={'sidebar' + (button_folded ? '' : ' sidebar--open')}>
-          <div className='SearchBox_div'>
-            {mapApiLoaded && (
-              <SearchBox
-                map={mapInstance}
-                mapApi={mapApi}
-                searchadd={this.searchAdd}
-              />
-            )}
+      <div className="TravMap_div">
+        <div className={"sidebar" + (button_folded ? "" : " sidebar--open")}>
+          <div className="SearchBox_div">
+            {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} searchadd={this.searchAdd} />}
           </div>
           <SideBar places={userAddPlaces} />
         </div>
         <button
-          draggable='false'
-          className={'Button' + (button_folded ? '' : ' Button--open')}
+          draggable="false"
+          className={"Button" + (button_folded ? "" : " Button--open")}
           onClick={this.buttonSlideState}
         >
           <FontAwesomeIcon
-            className='Icon_slide'
+            className="Icon_slide"
             icon={faSearchLocation}
             style={{
-              position: 'absolute',
-              top: '7px',
-              left: '7px',
-              height: '26px',
-              width: '26px'
+              position: "absolute",
+              top: "7px",
+              left: "7px",
+              height: "26px",
+              width: "26px"
             }}
           />
         </button>
@@ -140,7 +138,7 @@ class TravMap extends Component {
           center={user_center}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,
-            libraries: ['places', 'geometry']
+            libraries: ["places", "geometry"]
           }}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}

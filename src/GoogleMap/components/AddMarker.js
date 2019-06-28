@@ -1,22 +1,26 @@
 import React, { Component, Fragment } from "react";
 import InfoWindow from "./InfoWindow";
 import PropTypes from "prop-types";
+// Icon
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearchLocation } from "@fortawesome/free-solid-svg-icons";
 
 // Marker component
 const AddMarker = props => {
   const markerStyle = {
-    border: "1px solid white",
-    borderRadius: "50%",
-    height: 10,
-    width: 10,
-    backgroundColor: props.show ? "red" : "blue",
+    height: "20px",
+    width: "20px",
+    color: props.show ? "red" : "blue",
     cursor: "pointer",
-    zIndex: 10
+    zIndex: 10,
+    position: "absolute"
   };
 
   return (
     <Fragment>
-      <div style={markerStyle} /> {props.show && <InfoWindow place={props.place} useradd={props.useradd} />}{" "}
+      {/* <div style={markerStyle} /> */}
+      <FontAwesomeIcon icon={faSearchLocation} style={markerStyle} />
+      {props.show && <InfoWindow place={props.place} useradd={props.useradd} />}{" "}
     </Fragment>
   );
 };
