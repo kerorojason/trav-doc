@@ -1,89 +1,89 @@
 .TravMap_div {
-    width: 50%;
-    height: 95vh;
-    position: relative;
-    overflow: hidden;
+  width: 50%;
+  height: 95vh;
+  position: relative;
+  overflow: hidden;
 }
 
 .SearchBox_div {
-    height: 10%;
-    right: 0px;
-    width: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column-reverse;
-    position: absolute;
-    justify-content: center;
-    z-index: 2;
+  height: 10%;
+  right: 0px;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column-reverse;
+  position: absolute;
+  justify-content: center;
+  z-index: 2;
 }
 
 .Button {
-    height: 40px;
-    width: 40px;
-    border-radius: 2px;
-    user-select: none;
-    cursor: pointer;
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    display: flex;
-    flex-direction: column-reverse;
-    z-index: 2;
-    background-color: #ffffff;
-    box-shadow: 1px 1px 2px #a8a7a7;
-    transition: all 0.25s;
+  height: 40px;
+  width: 40px;
+  border-radius: 2px;
+  user-select: none;
+  cursor: pointer;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+  z-index: 2;
+  background-color: #ffffff;
+  box-shadow: 1px 1px 2px #a8a7a7;
+  transition: all 0.25s;
 }
 
 .Button:focus {
-    outline: 0;
-    border: none;
+  outline: 0;
+  border: none;
 }
 
 .Button--open {
-    left: 40%;
+  left: 40%;
 }
 
 .sidebar {
-    height: 100%;
-    width: 40%;
-    position: absolute;
-    right: 100%;
-    top: 0px;
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-    //align-items: center;
-    z-index: 2;
-    background-color: rgba(0, 0, 0, 0.6);
-    transition: all 0.25s;
+  height: 100%;
+  width: 40%;
+  position: absolute;
+  right: 100%;
+  top: 0px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: all 0.25s;
 }
 
 .sidebar--open {
-    transform: translateX(100%);
+  transform: translateX(100%);
 }
 
 .sidebar__context {
-    overflow: hidden;
-    background-color: white;
-    position: absolute;
-    z-index: 2;
-    top: 10%;
-    width: 100%;
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
+  overflow: hidden;
+  background-color: white;
+  position: absolute;
+  z-index: 2;
+  top: 10%;
+  width: 100%;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .Icon_slide {
-    color: gray;
+  color: gray;
 }
 
 .Icon_slide:hover {
-    color: #3d3b3b;
+  color: #3d3b3b;
 }

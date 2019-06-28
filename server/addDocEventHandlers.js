@@ -32,10 +32,6 @@ module.exports = wss => {
     let delta = getDelta(initialRawState, getState());
     send({ delta, client: ws });
 
-    ws.on('fuck', function fuxx() {
-      console.log('fuxxxxxxxxx');
-    });
-
     ws.on('message', function incoming(data) {
       let { raw, selection } = JSON.parse(data);
       updateUser(token, { selection });

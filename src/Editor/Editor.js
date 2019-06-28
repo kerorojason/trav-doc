@@ -13,7 +13,8 @@ import './Editor.scss';
 import * as richStyleHelpers from './richStyle/helper';
 import BlockStyleControls from './richStyle/BlockStyleControls';
 import InlineStyleControls from './richStyle/InlineStyleControls';
-import initialState from './richStyle/initialState';
+import Header from './Header';
+// import initialState from './richStyle/initialState';
 
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js-focus-plugin/lib/plugin.css';
@@ -41,7 +42,6 @@ const mentionPlugin = createMentionPlugin({
   mentionComponent: mentionProps => (
     <span
       className={mentionProps.className}
-      // eslint-disable-next-line no-alert
       onClick={() => alert(mentionProps.mention.name + ' clicked!')}
     >
       {mentionProps.children}
@@ -54,14 +54,11 @@ const decorator = composeDecorators(
   focusPlugin.decorator,
   blockDndPlugin.decorator
 );
-
 const imagePlugin = createImagePlugin({ decorator });
-
 const dragNDropFileUploadPlugin = createDragNDropUploadPlugin({
   handleUpload: mockUpload,
   addImage: imagePlugin.addImage
 });
-
 const plugins = [
   dragNDropFileUploadPlugin,
   blockDndPlugin,
@@ -83,7 +80,7 @@ class CollaborativeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createWithContent(convertFromRaw(initialState)),
+      editorState: EditorState.createEmpty(),
       customStyleMap: {},
       cursors: [],
       suggestions: mentions
@@ -199,6 +196,7 @@ class CollaborativeEditor extends React.Component {
   onAddMention = () => {
     // get the mention object selected
   };
+
   render() {
     const { cursors, editorState } = this.state;
     const { ws, userId, ...rest } = this.props;
@@ -219,6 +217,7 @@ class CollaborativeEditor extends React.Component {
     }
     return (
       <div className='Editor-root'>
+        <Header />
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}
@@ -237,7 +236,7 @@ class CollaborativeEditor extends React.Component {
             customStyleMap={this.state.customStyleMap}
             handleKeyCommand={this.handleKeyCommand}
             onTab={this.onTab}
-            placeholder='Tell a story...'
+            placeholder="Let's plan a trip..."
             spellCheck={true}
             plugins={plugins}
             ref='editor'

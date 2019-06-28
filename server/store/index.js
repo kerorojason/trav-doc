@@ -1,4 +1,4 @@
-const createEmpty = require('./createEmpty');
+const createEditorState = require('./createEditorState');
 const uuid = require('uuid/v4');
 const jsondiffpatch = require('jsondiffpatch');
 
@@ -25,7 +25,7 @@ module.exports = () => {
   const users = {};
   const customStyleMap = {};
 
-  let rawState = createEmpty();
+  let rawState = createEditorState();
   let initialRawState = jsondiffpatch.clone(rawState);
 
   const getState = () => rawState;
