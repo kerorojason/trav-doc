@@ -58,7 +58,12 @@ class TravMap extends Component {
     this.setState({ searchPlaces: [] });
   };
 
-  userAddNumber = () => {};
+  userAddclear = index => {
+    const addIndex = this.state.userAddPlaces;
+    addIndex.splice(index, 1);
+    this.props.handleAddPlaces(addIndex);
+    // this.setState({ userAddPlaces: addIndex });
+  };
   // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
     const addIndex = this.state.userAddPlaces;
@@ -125,7 +130,7 @@ class TravMap extends Component {
               />
             )}
           </div>
-          <SideBar places={userAddPlaces} />
+          <SideBar places={userAddPlaces} userAddclear={this.userAddclear} />
         </div>
         <button
           draggable="false"

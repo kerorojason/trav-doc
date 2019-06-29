@@ -25,20 +25,20 @@ const Wrapper = styled.div`
 
 const Marker = props => (
   // <Wrapper alt={props.text} {...(props.onClick ? { onClick: props.onClick } : {})}>
-  <div style={{ height: "25px", width: "25px", position: "relative" }}>
+  <div style={{ height: "30px", width: "30px", position: "relative" }}>
     <FontAwesomeIcon
       icon={faMapMarker}
-      style={{ top: "0px", left: "0px", height: "25px", width: "25px", color: "#ba0b66", position: "absolute" }}
+      style={{ top: "0px", left: "0px", height: "30px", width: "30px", color: "#ba0b66", position: "absolute" }}
     />
     <div
       style={{
         fontFamily: "fantasy",
         color: "white",
         textAlign: "center",
-        top: "3px",
+        top: "4px",
         left: "0px",
-        height: "25px",
-        width: "25px",
+        height: "30px",
+        width: "30px",
         position: "absolute"
       }}
     >

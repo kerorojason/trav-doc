@@ -100,8 +100,9 @@
     border: 0px;
     margin: 0px;
     padding: 0px;
-    font-family: "Noto Sans TC", sans-serif;
+    font-family: 'Noto Sans TC', sans-serif;
     &__item {
+        position: relative;
         background-color: rgba(255, 255, 255, 0.8);
         margin: 5px 5px 8px 5px !important;
         border-radius: 5px;
@@ -112,7 +113,7 @@
     }
     &__header {
         font-size: 20px;
-        margin: 5px 0 5px 0;
+        margin: 5px 15px 5px 0;
     }
     &__img {
         display: inline-block;
@@ -125,6 +126,27 @@
     &__addr {
         margin: 2px;
         font-size: 11px;
+    }
+    &__icon {
+        top: 5px;
+        right: 5px;
+        height: 30px;
+        width: 30px !important;
+        color: #ba0b66;
+        position: absolute;
+        margin-left: 10px;
+    }
+    &__num {
+        font-family: fantasy;
+        color: white;
+        text-align: center;
+        top: 7px;
+        right: 5px;
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        cursor: pointer;
+        margin-left: 5px;
     }
 }
 
