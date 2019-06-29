@@ -114,17 +114,27 @@ class TravMap extends Component {
       }
     }
   }
+  //刪除搜尋欄資料
+  clearSearchAns = () => {
+    this.setState({ searchPlaces: [] });
+  };
 
+  userAddclear = index => {
+    const addIndex = this.state.userAddPlaces;
+    addIndex.splice(index, 1);
+    this.props.handleAddPlaces(addIndex);
+    // this.setState({ userAddPlaces: addIndex });
+  };
   // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
     const addIndex = this.state.userAddPlaces;
-    const searchIndex = this.state.searchPlaces;
-    const del = searchIndex.indexOf(place);
+    //const searchIndex = this.state.searchPlaces;
+    //const del = searchIndex.indexOf(place);
     //console.log(index.indexOf(place));
     if (addIndex.indexOf(place) === -1) {
       addIndex.push(place);
-      searchIndex.splice(del, 1);
-      this.setState({ searchPlaces: searchIndex });
+      //searchIndex.splice(del, 1);
+      this.setState({ searchPlaces: [] });
       this.props.handleAddPlaces(addIndex);
     }
   };
@@ -182,7 +192,8 @@ class TravMap extends Component {
             )}
           </div>
           <SideBar places={userAddPlaces} select={this.selectPlace} 
-          stEnd={this.state.startEndPlaces} direction={directionData}/>
+          stEnd={this.state.startEndPlaces} direction={directionData}
+          userAddclear={this.userAddclear}/>
         </div>
         <button
           draggable="false"
@@ -236,12 +247,13 @@ class TravMap extends Component {
           onChildClick={this.onChildClickCallback}
         >
           {!isEmpty(userAddPlaces) &&
-            userAddPlaces.map(place => (
+            userAddPlaces.map((place, index) => (
               <Marker
                 key={place.place_id}
                 text={place.name}
                 lat={place.geometry.location.lat()}
                 lng={place.geometry.location.lng()}
+                index={index}
               />
             ))}
           {!isEmpty(searchPlaces) &&

@@ -1,6 +1,7 @@
 import React from 'react';
-
-const SideBar = ({ places,select,stEnd, direction}) =>{ 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faMapMarker } from '@fortawesome/free-solid-svg-icons';
+const SideBar = ({ places,select,stEnd, direction, userAddclear}) =>{ 
   
   if(direction){
     var start=direction.request.origin.placeId
@@ -21,6 +22,13 @@ const SideBar = ({ places,select,stEnd, direction}) =>{
 
     listItems.push(
       <li className={stEnd.includes(places[i].place_id)? 'sidebar-list__item_select':'sidebar-list__item'} key={places[i].place_id} place_id={places[i].place_id} onClick={e=>select(e,places[i].place_id)}>
+        <div className='sidebar-list__num' onClick={i => userAddclear(i)}>
+          <span className='sidebar-list__span'>{i + 1}</span>
+        </div>
+        <FontAwesomeIcon icon={faTimes} className='sidebar-list__spanicon' />
+
+        <FontAwesomeIcon icon={faMapMarker} className='sidebar-list__icon' />
+
         <h3 className='sidebar-list__header'>
           <span
             className='sidebar-list__img'

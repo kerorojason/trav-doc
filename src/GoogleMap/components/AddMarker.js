@@ -10,7 +10,7 @@ const AddMarker = props => {
   const markerStyle = {
     height: "25px",
     width: "25px",
-    color: props.show ? "red" : "blue",
+    color: props.show ? "#c73a30" : "#239985",
     cursor: "pointer",
     zIndex: 10,
     position: "absolute",
