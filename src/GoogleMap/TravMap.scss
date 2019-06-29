@@ -101,6 +101,16 @@
     margin: 0px;
     padding: 0px;
     font-family: "Noto Sans TC", sans-serif;
+    &__item_select {
+        background-color: rgba(255, 255, 255, 0.8);
+        margin: 5px 5px 8px 5px !important;
+        border-radius: 5px;
+        padding: 3px 5px;
+        border: blue 2px solid;
+        &:hover {
+            transform: scale(1.02);
+        }
+    }
     &__item {
         background-color: rgba(255, 255, 255, 0.8);
         margin: 5px 5px 8px 5px !important;

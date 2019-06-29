@@ -16,7 +16,7 @@ import AddMarker from "./components/AddMarker";
 // Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchLocation } from "@fortawesome/free-solid-svg-icons";
-
+import { faDirections } from "@fortawesome/free-solid-svg-icons";
 class TravMap extends Component {
   constructor(props) {
     super(props);
@@ -28,9 +28,70 @@ class TravMap extends Component {
       searchPlaces: [],
       user_center: [25.0195235, 121.54840689999999],
       button_folded: true,
-      userAddPlaces: []
+      userAddPlaces: [],
+      travelMode: 'DRIVING',
+      directionData:null,
+      startEndPlaces:[]
     };
   }
+
+
+  //選取place
+  selectPlace=(e,place) =>{
+
+    var stEnd=this.state.startEndPlaces
+    stEnd.push(place)
+    if (stEnd.length>2){
+      stEnd.shift()
+    }
+    this.setState({startEndPlaces:stEnd})
+    console.log(stEnd)
+
+  }
+  //刪除place
+  deletePlace=() =>{
+    
+  }
+
+  //導航
+  direction=() =>{
+    var directionsService = new this.state.mapApi.DirectionsService();
+    var directionsDisplay = new this.state.mapApi.DirectionsRenderer();
+    directionsDisplay.setMap(this.state.mapInstance)
+    console.log(this.state.userAddPlaces)
+    
+    let places=this.state.userAddPlaces
+    let startId=places.findIndex(place=>(this.state.startEndPlaces.includes(place.place_id)))
+    let endId=places.slice(startId+1).findIndex(place=>(this.state.startEndPlaces.includes(place.place_id)))+1
+
+
+    var waypoints=[]
+    console.log(startId,endId)
+    for(var i=startId+1;i<endId;i++){
+      waypoints.push({"location":{'placeId':places[i].place_id},stopover: true})
+    }
+
+    console.log(waypoints)
+    var request = {
+      origin:{'placeId':places[startId].place_id},
+      destination:{'placeId':places[endId].place_id},
+      travelMode: this.state.travelMode,
+      waypoints:waypoints
+    };
+    directionsService.route(request, function(response, status) {
+      console.log(response)
+      console.log(status)
+      
+      if (status == 'OK') {
+        directionsDisplay.set('directions', null);//remove previous direction
+        directionsDisplay.setDirections(response);
+        this.setState({directionData:response})
+        console.log(response)
+      }
+    }.bind(this));
+
+  }
+
 
   // 找尋使用者地點，使其googlemap到達其中心
   componentDidMount() {
@@ -53,10 +114,7 @@ class TravMap extends Component {
       }
     }
   }
-  //刪除搜尋欄資料
-  clearSearchAns = () => {
-    this.setState({ searchPlaces: [] });
-  };
+
   // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
     const addIndex = this.state.userAddPlaces;
@@ -109,7 +167,7 @@ class TravMap extends Component {
   };
 
   render() {
-    const { userAddPlaces, searchPlaces, mapApiLoaded, mapInstance, mapApi, user_center, button_folded } = this.state;
+    const { userAddPlaces, searchPlaces, mapApiLoaded, mapInstance, mapApi, user_center, button_folded, directionData } = this.state;
     return (
       <div className="TravMap_div">
         <div className={"sidebar" + (button_folded ? "" : " sidebar--open")}>
@@ -123,7 +181,8 @@ class TravMap extends Component {
               />
             )}
           </div>
-          <SideBar places={userAddPlaces} />
+          <SideBar places={userAddPlaces} select={this.selectPlace} 
+          stEnd={this.state.startEndPlaces} direction={directionData}/>
         </div>
         <button
           draggable="false"
@@ -133,6 +192,27 @@ class TravMap extends Component {
           <FontAwesomeIcon
             className="Icon_slide"
             icon={faSearchLocation}
+            style={{
+              position: "absolute",
+              top: "7px",
+              left: "7px",
+              height: "26px",
+              width: "26px"
+            }}
+          />
+        </button>
+
+        <button
+          draggable="false"
+          className={"Button" + (button_folded ? "" : " Button--open")}
+          onClick={this.direction}
+          style={{
+            top: "50px",
+          }}
+        >
+          <FontAwesomeIcon
+            className="Icon_slide"
+            icon={faDirections}
             style={{
               position: "absolute",
               top: "7px",
