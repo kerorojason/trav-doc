@@ -28,7 +28,7 @@ class TravMap extends Component {
       searchPlaces: [],
       user_center: [25.0195235, 121.54840689999999],
       button_folded: true,
-      userAddPlaces: [],
+      // userAddPlaces: [],
       travelMode: 'DRIVING',
       directionData: null,
       startEndPlaces: []
@@ -53,9 +53,8 @@ class TravMap extends Component {
     var directionsService = new this.state.mapApi.DirectionsService();
     var directionsDisplay = new this.state.mapApi.DirectionsRenderer();
     directionsDisplay.setMap(this.state.mapInstance);
-    console.log(this.state.userAddPlaces);
 
-    let places = this.state.userAddPlaces;
+    let places = this.props.userAddPlaces;
     let startId = places.findIndex(place =>
       this.state.startEndPlaces.includes(place.place_id)
     );
@@ -188,7 +187,7 @@ class TravMap extends Component {
   };
 
   userAddclear = index => {
-    const addIndex = this.state.userAddPlaces;
+    const addIndex = this.props.userAddPlaces;
     addIndex.splice(index, 1);
     this.props.handleAddPlaces(addIndex);
     // this.setState({ userAddPlaces: addIndex });
@@ -359,6 +358,7 @@ class TravMap extends Component {
                 text={place.name}
                 lat={place.geometry.location.lat}
                 lng={place.geometry.location.lng}
+                index={index}
               />
             ))}
           {!isEmpty(searchPlaces) &&
