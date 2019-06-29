@@ -53,7 +53,10 @@ class TravMap extends Component {
       }
     }
   }
-
+  //刪除搜尋欄資料
+  clearSearchAns = () => {
+    this.setState({ searchPlaces: [] });
+  };
   // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
     const addIndex = this.state.userAddPlaces;
@@ -111,7 +114,14 @@ class TravMap extends Component {
       <div className="TravMap_div">
         <div className={"sidebar" + (button_folded ? "" : " sidebar--open")}>
           <div className="SearchBox_div">
-            {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} searchadd={this.searchAdd} />}
+            {mapApiLoaded && (
+              <SearchBox
+                map={mapInstance}
+                mapApi={mapApi}
+                searchadd={this.searchAdd}
+                clearSearchAns={this.clearSearchAns}
+              />
+            )}
           </div>
           <SideBar places={userAddPlaces} />
         </div>
