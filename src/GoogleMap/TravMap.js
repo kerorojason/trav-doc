@@ -57,16 +57,18 @@ class TravMap extends Component {
   clearSearchAns = () => {
     this.setState({ searchPlaces: [] });
   };
+
+  userAddNumber = () => {};
   // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
     const addIndex = this.state.userAddPlaces;
-    const searchIndex = this.state.searchPlaces;
-    const del = searchIndex.indexOf(place);
+    //const searchIndex = this.state.searchPlaces;
+    //const del = searchIndex.indexOf(place);
     //console.log(index.indexOf(place));
     if (addIndex.indexOf(place) === -1) {
       addIndex.push(place);
-      searchIndex.splice(del, 1);
-      this.setState({ searchPlaces: searchIndex });
+      //searchIndex.splice(del, 1);
+      this.setState({ searchPlaces: [] });
       this.props.handleAddPlaces(addIndex);
     }
   };
@@ -156,12 +158,13 @@ class TravMap extends Component {
           onChildClick={this.onChildClickCallback}
         >
           {!isEmpty(userAddPlaces) &&
-            userAddPlaces.map(place => (
+            userAddPlaces.map((place, index) => (
               <Marker
                 key={place.place_id}
                 text={place.name}
                 lat={place.geometry.location.lat()}
                 lng={place.geometry.location.lng()}
+                index={index}
               />
             ))}
           {!isEmpty(searchPlaces) &&

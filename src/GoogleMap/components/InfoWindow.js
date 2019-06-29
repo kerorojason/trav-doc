@@ -27,7 +27,9 @@ const InfoWindow = props => {
       <div style={{ fontSize: 14, color: "grey" }}> {place.types[0]} </div>{" "}
       <div style={{ fontSize: 14, color: "grey" }}> {"$".repeat(place.price_level)} </div>{" "}
       <div style={{ fontSize: 14, color: "green" }}>{place.opening_hours.open_now ? "Open" : "Closed"}</div>
-      <button onClick={e => props.useradd(place)}>Add</button>
+      <div>
+        <button onClick={e => props.useradd(place)}>Add</button>
+      </div>
     </div>
   );
 };
