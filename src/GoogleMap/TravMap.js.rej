@@ -1,0 +1,13 @@
+diff a/src/GoogleMap/TravMap.js b/src/GoogleMap/TravMap.js	(rejected hunks)
+@@ -53,7 +53,10 @@
+       }
+     }
+   }
+-
++  //刪除搜尋欄資料
++  clearSearchAns = () => {
++    this.setState({ searchPlaces: [] });
++  };
+   // 使用者添加自定義地點於地圖列表中
+   userAdd = place => {
+     const addIndex = this.state.userAddPlaces;

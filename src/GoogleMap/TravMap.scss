@@ -39,6 +39,17 @@
   color: #3d3b3b;
 }
 
+.SearchBox_del {
+  color: gray;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.SearchBox_del:hover {
+  color: #3d3b3b;
+}
+
 .Button {
   height: 40px;
   width: 40px;
