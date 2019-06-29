@@ -17,8 +17,14 @@ module.exports = wss => {
     getState,
     updateUser,
     patchState,
-    send,
-    initialRawState
+    sendDoc,
+    initialRawState,
+    getTitle,
+    setTitle,
+    sendTitle,
+    getPlaces,
+    setPlaces,
+    sendPlaces
   } = store;
 
   wss.on('connection', function connection(ws, req) {
@@ -30,21 +36,57 @@ module.exports = wss => {
     });
 
     let delta = getDelta(initialRawState, getState());
-    send({ delta, client: ws });
+    sendDoc({ delta, client: ws });
+
+    sendTitle({ getTitle, client: ws });
 
     ws.on('message', function incoming(data) {
-      let { raw, selection } = JSON.parse(data);
-      updateUser(token, { selection });
-      let delta = getDelta(getState(), raw);
-      if (delta) {
-        patchState(delta);
-      }
+      data = JSON.parse(data);
+      const { type } = data;
+      switch (type) {
+        case 'doc':
+          let { raw, selection } = data;
+          updateUser(token, { selection });
+          let delta = getDelta(getState(), raw);
+          if (delta) {
+            patchState(delta);
+          }
+          wss.clients.forEach(client => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+              sendDoc({ client, delta });
+            }
+          });
+          break;
 
-      wss.clients.forEach(client => {
-        if (client !== ws && client.readyState === WebSocket.OPEN) {
-          send({ client, delta });
-        }
-      });
+        case 'title':
+          let { title } = data;
+          console.log(title);
+          if (title !== getTitle()) {
+            setTitle(title);
+            wss.clients.forEach(client => {
+              if (client !== ws && client.readyState === WebSocket.OPEN) {
+                sendTitle({ client });
+              }
+            });
+          }
+          break;
+
+        case 'places':
+          let { userAddPlaces } = data;
+          console.log(
+            userAddPlaces.length > 0 ? userAddPlaces[0].geometry.location : 0
+          );
+          if (userAddPlaces.length !== getPlaces().length) {
+            setPlaces(userAddPlaces);
+            wss.clients.forEach(client => {
+              if (client !== ws && client.readyState === WebSocket.OPEN) {
+                sendPlaces({ client, userAddPlaces });
+              }
+            });
+          }
+          console.log(userAddPlaces.length);
+          break;
+      }
     });
   });
 };

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 // Icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearchLocation } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 const Wrapper = styled.div`
   position: absolute;
   align-items: center;
@@ -55,6 +55,7 @@ class SearchBox extends Component {
   clearSearchBox() {
     this.searchInput.value = "";
   }
+
   render() {
     return (
       //<Wrapper>
@@ -68,19 +69,19 @@ class SearchBox extends Component {
           onFocus={this.clearSearchBox}
           placeholder="Enter a location"
         />
-        {/* <button draggable="false" className={"Button"}>
-          <FontAwesomeIcon
-            className="Icon_slide"
-            icon={faSearchLocation}
-            style={{
-              position: "absolute",
-              top: "7px",
-              left: "7px",
-              height: "26px",
-              width: "26px"
-            }}
-          />
-        </button> */}
+        <FontAwesomeIcon
+          className="SearchBox_del"
+          icon={faTimes}
+          style={{
+            position: "absolute",
+            height: "20px",
+            width: "20px"
+          }}
+          onClick={() => {
+            this.clearSearchBox();
+            this.props.clearSearchAns();
+          }}
+        />
       </Fragment>
       //</Wrapper>
     );

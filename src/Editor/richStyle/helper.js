@@ -1,10 +1,11 @@
 import { RichUtils } from 'draft-js';
 
 export function handleKeyCommand(command) {
-  const { editorState } = this.state;
+  const { editorState } = this.props;
+  console.log(editorState);
   const newState = RichUtils.handleKeyCommand(editorState, command);
   if (newState) {
-    this.onChange(newState);
+    this.props.handleDocChange(newState);
     return true;
   }
   return false;
@@ -12,16 +13,20 @@ export function handleKeyCommand(command) {
 
 export function onTab(e) {
   const maxDepth = 4;
-  this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
+  this.props.handleDocChange(
+    RichUtils.onTab(e, this.props.editorState, maxDepth)
+  );
 }
 
 export function toggleBlockType(blockType) {
-  this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
+  this.props.handleDocChange(
+    RichUtils.toggleBlockType(this.props.editorState, blockType)
+  );
 }
 
 export function toggleInlineStyle(inlineStyle) {
-  this.onChange(
-    RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle)
+  this.props.handleDocChange(
+    RichUtils.toggleInlineStyle(this.props.editorState, inlineStyle)
   );
 }
 

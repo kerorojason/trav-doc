@@ -2,7 +2,7 @@ import React from 'react';
 import { unstable_deferredUpdates as deferredUpdates } from 'react-dom';
 
 import PropTypes from 'prop-types';
-import { EditorState, convertToRaw, convertFromRaw, RichUtils } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import Editor, { composeDecorators } from 'draft-js-plugins-editor';
 
 import debounce from 'debounce';
@@ -14,7 +14,6 @@ import * as richStyleHelpers from './richStyle/helper';
 import BlockStyleControls from './richStyle/BlockStyleControls';
 import InlineStyleControls from './richStyle/InlineStyleControls';
 import Header from './Header';
-// import initialState from './richStyle/initialState';
 
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js-focus-plugin/lib/plugin.css';
@@ -31,7 +30,6 @@ import createMentionPlugin, {
 } from 'draft-js-mention-plugin';
 
 import mockUpload from './mockUpload';
-// import mentions from './mentions';
 
 const highlightPlugin = createHighlightPlugin();
 const focusPlugin = createFocusPlugin();
@@ -59,7 +57,7 @@ const plugins = [
 
 class CollaborativeEditor extends React.Component {
   static propTypes = {
-    editorState: PropTypes.object,
+    // editorState: PropTypes.object,
     customStyleMap: PropTypes.object,
     update: PropTypes.func
   };
@@ -67,7 +65,7 @@ class CollaborativeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty(),
+      // editorState: EditorState.createEmpty(),
       customStyleMap: {},
       cursors: [],
       suggestions: this.props.userAddPlaces,
@@ -75,10 +73,7 @@ class CollaborativeEditor extends React.Component {
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.onChange = editorState => {
-      this.broadcast();
-      this.setState({ editorState });
-    };
+
     this.mentionPlugin = createMentionPlugin({
       mentions: this.props.userAddPlaces,
       mentionComponent: mentionProps => (
@@ -92,48 +87,11 @@ class CollaborativeEditor extends React.Component {
     });
   }
 
-  _isUnmounted = false;
-
-  handleMessage = ({ delta, customStyleMap, users, transactionId }) => {
-    let editorState = this.state.editorState;
-    let nextEditorState = applyDelta(editorState, delta);
-    this.setState(
-      {
-        customStyleMap: {
-          ...customStyleMap,
-          [this.props.userId]: {
-            backgroundColor: 'transparent'
-          }
-        },
-        editorState: nextEditorState
-      },
-      () => {
-        deferredUpdates(() => {
-          let cursors = users
-            .filter(user => user.selection && user.id !== this.props.userId)
-            .map(({ selection, id }) =>
-              getCursorStyle(nextEditorState, selection)
-            )
-            .filter(style => style);
-          this.setState({
-            cursors
-          });
-        });
-      }
-    );
-  };
-
   componentDidMount() {
-    this.props.ws.onmessage = event => {
-      if (this._isUnmounted) return;
-      this.handleMessage(JSON.parse(event.data));
-    };
-
     window.addEventListener('resize', this.resize);
   }
 
   componentWillUnmount() {
-    this._isUnmounted = true;
     window.removeEventListener('resize', this.resize);
   }
 
@@ -143,52 +101,12 @@ class CollaborativeEditor extends React.Component {
     }
   }, 200);
 
-  broadcast = debounce(() => {
-    let editorState = this.state.editorState;
-    let contentState = editorState.getCurrentContent();
-    let raw = convertToRaw(contentState);
-    this.props.ws.send(
-      JSON.stringify({
-        raw,
-        selection: editorState.getSelection().toJS(),
-        timestamp: Date.now(),
-        id: this.props.userId
-      })
-    );
-  }, 300);
-
-  onChange = editorState => {
-    this.broadcast();
-    let nextEditorState = editorState;
-    let currentInlineStyles = nextEditorState.getCurrentInlineStyle();
-    if (!currentInlineStyles.has(this.props.userId)) {
-      nextEditorState = RichUtils.toggleInlineStyle(
-        nextEditorState,
-        this.props.userId
-      );
-    }
-
-    let keys = Object.keys(this.state.customStyleMap).filter(
-      key => key !== this.props.userId
-    );
-
-    nextEditorState = keys.reduce(
-      (acc, key) =>
-        currentInlineStyles.has(key)
-          ? RichUtils.toggleInlineStyle(acc, key)
-          : acc,
-      nextEditorState
-    );
-    this.setState({ editorState: nextEditorState });
-  };
-
   handleKeyCommand = richStyleHelpers.handleKeyCommand.bind(this);
   onTab = richStyleHelpers.onTab.bind(this);
   toggleBlockType = richStyleHelpers.toggleBlockType.bind(this);
   toggleInlineStyle = richStyleHelpers.toggleInlineStyle.bind(this);
   onSearchChange = ({ value }) => {
     this.setState({
-      // suggestions: defaultSuggestionsFilter(value, mentions)
       suggestions: defaultSuggestionsFilter(value, this.props.userAddPlaces)
     });
   };
@@ -198,8 +116,16 @@ class CollaborativeEditor extends React.Component {
   };
 
   render() {
-    const { cursors, editorState } = this.state;
-    const { ws, userId, ...rest } = this.props;
+    const { cursors } = this.state;
+    const {
+      editorState,
+      ws,
+      title,
+      handleSetTitle,
+      handleDocChange,
+      userId,
+      ...rest
+    } = this.props;
     const { MentionSuggestions } = this.mentionPlugin;
     // If the user changes block type before entering any text,
     // hide placeholder.
@@ -215,9 +141,10 @@ class CollaborativeEditor extends React.Component {
         className += ' Editor-hidePlaceholder';
       }
     }
+
     return (
       <div className='Editor-root'>
-        <Header />
+        <Header ws={ws} title={title} handleSetTitle={handleSetTitle} />
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}
@@ -231,8 +158,9 @@ class CollaborativeEditor extends React.Component {
             <span className={'cursor'} style={cursor} key={i} />
           ))}
           <Editor
-            onChange={this.onChange}
-            editorState={this.state.editorState}
+            // onChange={this.onChange}
+            onChange={handleDocChange}
+            editorState={editorState}
             customStyleMap={this.state.customStyleMap}
             handleKeyCommand={this.handleKeyCommand}
             onTab={this.onTab}

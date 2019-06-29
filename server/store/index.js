@@ -24,7 +24,8 @@ const colors = [
 module.exports = () => {
   const users = {};
   const customStyleMap = {};
-
+  let title = 'Our Trip';
+  let places = [];
   let rawState = createEditorState();
   let initialRawState = jsondiffpatch.clone(rawState);
 
@@ -63,13 +64,41 @@ module.exports = () => {
 
   const getDelta = (left, right) => j.diff(left, right);
 
-  const send = ({ client, delta }) => {
+  const sendDoc = ({ client, delta }) => {
     client.send(
       JSON.stringify({
+        type: 'doc',
         delta,
         customStyleMap,
         transactionId: uuid(),
         users: Object.keys(users).map(key => users[key])
+      })
+    );
+  };
+
+  const getTitle = () => title;
+  const setTitle = newTitle => {
+    title = newTitle;
+  };
+
+  const sendTitle = ({ client }) => {
+    client.send(
+      JSON.stringify({
+        type: 'title',
+        title
+      })
+    );
+  };
+
+  const getPlaces = () => places;
+  const setPlaces = newplaces => {
+    places = newplaces;
+  };
+  const sendPlaces = ({ client, userAddPlaces }) => {
+    client.send(
+      JSON.stringify({
+        type: 'places',
+        userAddPlaces
       })
     );
   };
@@ -83,6 +112,12 @@ module.exports = () => {
     setUser,
     updateUser,
     deleteUser,
-    send
+    sendDoc,
+    getTitle,
+    setTitle,
+    sendTitle,
+    getPlaces,
+    setPlaces,
+    sendPlaces
   };
 };

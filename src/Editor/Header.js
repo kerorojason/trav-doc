@@ -4,17 +4,21 @@ import './Header.scss';
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      title: 'Our Trip'
-    };
   }
+
+  _isUnmounted = false;
+
+  componentWillUnmount() {
+    this._isUnmounted = true;
+  }
+
   render() {
     return (
       <div className='header'>
         <input
           className='header__input'
-          value={this.state.title}
-          onChange={e => this.setState({ title: e.target.value })}
+          value={this.props.title}
+          onChange={e => this.props.handleSetTitle(e.target.value)}
         />
         <button className='header__save'>Save</button>
       </div>

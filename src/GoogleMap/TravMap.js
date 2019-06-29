@@ -1,22 +1,22 @@
-import React, { Component, Fragment } from "react";
-import isEmpty from "lodash.isempty";
-import PropTypes from "prop-types";
+import React, { Component, Fragment } from 'react';
+import isEmpty from 'lodash.isempty';
+import PropTypes from 'prop-types';
 
 // TravMap 總體格式
-import "./TravMap.scss";
+import './TravMap.scss';
 
 // components:
-import Marker from "./components/Marker";
-import SideBar from "./components/SideBar";
-import GoogleMap from "./components/GoogleMap";
-import SearchBox from "./components/SearchBox";
-import InfoWindow from "./components/InfoWindow";
-import AddMarker from "./components/AddMarker";
+import Marker from './components/Marker';
+import SideBar from './components/SideBar';
+import GoogleMap from './components/GoogleMap';
+import SearchBox from './components/SearchBox';
+import InfoWindow from './components/InfoWindow';
+import AddMarker from './components/AddMarker';
 
 // Icon
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearchLocation } from "@fortawesome/free-solid-svg-icons";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearchLocation } from '@fortawesome/free-solid-svg-icons';
+import { faDirections } from '@fortawesome/free-solid-svg-icons';
 class TravMap extends Component {
   constructor(props) {
     super(props);
@@ -28,9 +28,75 @@ class TravMap extends Component {
       searchPlaces: [],
       user_center: [25.0195235, 121.54840689999999],
       button_folded: true,
-      userAddPlaces: []
+      userAddPlaces: [],
+      travelMode: 'DRIVING',
+      directionData: null,
+      startEndPlaces: []
     };
   }
+
+  //選取place
+  selectPlace = (e, place) => {
+    var stEnd = this.state.startEndPlaces;
+    stEnd.push(place);
+    if (stEnd.length > 2) {
+      stEnd.shift();
+    }
+    this.setState({ startEndPlaces: stEnd });
+    console.log(stEnd);
+  };
+  //刪除place
+  deletePlace = () => {};
+
+  //導航
+  direction = () => {
+    var directionsService = new this.state.mapApi.DirectionsService();
+    var directionsDisplay = new this.state.mapApi.DirectionsRenderer();
+    directionsDisplay.setMap(this.state.mapInstance);
+    console.log(this.state.userAddPlaces);
+
+    let places = this.state.userAddPlaces;
+    let startId = places.findIndex(place =>
+      this.state.startEndPlaces.includes(place.place_id)
+    );
+    let endId =
+      places
+        .slice(startId + 1)
+        .findIndex(place =>
+          this.state.startEndPlaces.includes(place.place_id)
+        ) + 1;
+
+    var waypoints = [];
+    console.log(startId, endId);
+    for (var i = startId + 1; i < endId; i++) {
+      waypoints.push({
+        location: { placeId: places[i].place_id },
+        stopover: true
+      });
+    }
+
+    console.log(waypoints);
+    var request = {
+      origin: { placeId: places[startId].place_id },
+      destination: { placeId: places[endId].place_id },
+      travelMode: this.state.travelMode,
+      waypoints: waypoints
+    };
+    directionsService.route(
+      request,
+      function(response, status) {
+        console.log(response);
+        console.log(status);
+
+        if (status == 'OK') {
+          directionsDisplay.set('directions', null); //remove previous direction
+          directionsDisplay.setDirections(response);
+          this.setState({ directionData: response });
+          console.log(response);
+        }
+      }.bind(this)
+    );
+  };
 
   // 找尋使用者地點，使其googlemap到達其中心
   componentDidMount() {
@@ -44,8 +110,8 @@ class TravMap extends Component {
 
   // 點擊@後的location，能讓地點在地圖正中間
   componentWillReceiveProps(nextProps) {
-    const nowCenter = this.state.mapInstance.getCenter();
     if (nextProps.focusedPlace.geometry) {
+      const nowCenter = this.state.mapInstance.getCenter();
       const location = nextProps.focusedPlace.geometry.location;
       if (nowCenter !== location) {
         this.state.mapInstance.setCenter(location);
@@ -53,17 +119,31 @@ class TravMap extends Component {
       }
     }
   }
+  //刪除搜尋欄資料
+  clearSearchAns = () => {
+    this.setState({ searchPlaces: [] });
+  };
 
+  userAddclear = index => {
+    const addIndex = this.state.userAddPlaces;
+    addIndex.splice(index, 1);
+    this.props.handleAddPlaces(addIndex);
+    // this.setState({ userAddPlaces: addIndex });
+  };
   // 使用者添加自定義地點於地圖列表中
   userAdd = place => {
-    const addIndex = this.state.userAddPlaces;
+    place.geometry.location = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng()
+    };
+    const addIndex = this.props.userAddPlaces;
     const searchIndex = this.state.searchPlaces;
     const del = searchIndex.indexOf(place);
     //console.log(index.indexOf(place));
     if (addIndex.indexOf(place) === -1) {
       addIndex.push(place);
-      searchIndex.splice(del, 1);
-      this.setState({ searchPlaces: searchIndex });
+      //searchIndex.splice(del, 1);
+      this.setState({ searchPlaces: [] });
       this.props.handleAddPlaces(addIndex);
     }
   };
@@ -72,7 +152,7 @@ class TravMap extends Component {
     place.map(place => {
       place.show = false;
       if (place.opening_hours === undefined) {
-        place.opening_hours = { open_now: "None" };
+        place.opening_hours = { open_now: 'None' };
         //console.log(place);
       }
     });
@@ -106,29 +186,72 @@ class TravMap extends Component {
   };
 
   render() {
-    const { userAddPlaces, searchPlaces, mapApiLoaded, mapInstance, mapApi, user_center, button_folded } = this.state;
+    const {
+      searchPlaces,
+      mapApiLoaded,
+      mapInstance,
+      mapApi,
+      user_center,
+      button_folded,
+      directionData
+    } = this.state;
+    const { userAddPlaces } = this.props;
     return (
-      <div className="TravMap_div">
-        <div className={"sidebar" + (button_folded ? "" : " sidebar--open")}>
-          <div className="SearchBox_div">
-            {mapApiLoaded && <SearchBox map={mapInstance} mapApi={mapApi} searchadd={this.searchAdd} />}
+      <div className='TravMap_div'>
+        <div className={'sidebar' + (button_folded ? '' : ' sidebar--open')}>
+          <div className='SearchBox_div'>
+            {mapApiLoaded && (
+              <SearchBox
+                map={mapInstance}
+                mapApi={mapApi}
+                searchadd={this.searchAdd}
+                clearSearchAns={this.clearSearchAns}
+              />
+            )}
           </div>
-          <SideBar places={userAddPlaces} />
+          <SideBar
+            places={userAddPlaces}
+            select={this.selectPlace}
+            stEnd={this.state.startEndPlaces}
+            direction={directionData}
+            userAddclear={this.userAddclear}
+          />
         </div>
         <button
-          draggable="false"
-          className={"Button" + (button_folded ? "" : " Button--open")}
+          draggable='false'
+          className={'Button' + (button_folded ? '' : ' Button--open')}
           onClick={this.buttonSlideState}
         >
           <FontAwesomeIcon
-            className="Icon_slide"
+            className='Icon_slide'
             icon={faSearchLocation}
             style={{
-              position: "absolute",
-              top: "7px",
-              left: "7px",
-              height: "26px",
-              width: "26px"
+              position: 'absolute',
+              top: '7px',
+              left: '7px',
+              height: '26px',
+              width: '26px'
+            }}
+          />
+        </button>
+
+        <button
+          draggable='false'
+          className={'Button' + (button_folded ? '' : ' Button--open')}
+          onClick={this.direction}
+          style={{
+            top: '50px'
+          }}
+        >
+          <FontAwesomeIcon
+            className='Icon_slide'
+            icon={faDirections}
+            style={{
+              position: 'absolute',
+              top: '7px',
+              left: '7px',
+              height: '26px',
+              width: '26px'
             }}
           />
         </button>
@@ -138,7 +261,7 @@ class TravMap extends Component {
           center={user_center}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,
-            libraries: ["places", "geometry"]
+            libraries: ['places', 'geometry']
           }}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}
@@ -146,12 +269,12 @@ class TravMap extends Component {
           onChildClick={this.onChildClickCallback}
         >
           {!isEmpty(userAddPlaces) &&
-            userAddPlaces.map(place => (
+            userAddPlaces.map((place, index) => (
               <Marker
                 key={place.place_id}
                 text={place.name}
-                lat={place.geometry.location.lat()}
-                lng={place.geometry.location.lng()}
+                lat={place.geometry.location.lat}
+                lng={place.geometry.location.lng}
               />
             ))}
           {!isEmpty(searchPlaces) &&
