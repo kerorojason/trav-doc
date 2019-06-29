@@ -22,7 +22,7 @@ const SideBar = ({ places, select, stEnd, direction, userAddclear }) => {
       <li
         className={
           stEnd.includes(places[i].place_id)
-            ? 'sidebar-list__item_select'
+            ? 'sidebar-list__item sidebar-list__item--select'
             : 'sidebar-list__item'
         }
         key={places[i].place_id}

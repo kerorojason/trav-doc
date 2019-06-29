@@ -115,9 +115,8 @@ class TravMap extends Component {
     var directionsService = new this.state.mapApi.DirectionsService();
     var directionsDisplay = new this.state.mapApi.DirectionsRenderer();
     directionsDisplay.setMap(this.state.mapInstance);
-    console.log(this.state.userAddPlaces);
 
-    let places = this.state.userAddPlaces;
+    let places = this.props.userAddPlaces;
     let startId = places.findIndex(place =>
       this.state.startEndPlaces.includes(place.place_id)
     );

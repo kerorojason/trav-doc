@@ -37,8 +37,8 @@ module.exports = wss => {
 
     let delta = getDelta(initialRawState, getState());
     sendDoc({ delta, client: ws });
-
     sendTitle({ getTitle, client: ws });
+    sendPlaces({ userAddPlaces: getPlaces(), client: ws });
 
     ws.on('message', function incoming(data) {
       data = JSON.parse(data);
@@ -60,7 +60,6 @@ module.exports = wss => {
 
         case 'title':
           let { title } = data;
-          console.log(title);
           if (title !== getTitle()) {
             setTitle(title);
             wss.clients.forEach(client => {
@@ -73,9 +72,6 @@ module.exports = wss => {
 
         case 'places':
           let { userAddPlaces } = data;
-          console.log(
-            userAddPlaces.length > 0 ? userAddPlaces[0].geometry.location : 0
-          );
           if (userAddPlaces.length !== getPlaces().length) {
             setPlaces(userAddPlaces);
             wss.clients.forEach(client => {
@@ -84,7 +80,6 @@ module.exports = wss => {
               }
             });
           }
-          console.log(userAddPlaces.length);
           break;
       }
     });
