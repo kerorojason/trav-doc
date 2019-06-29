@@ -136,6 +136,16 @@
         position: absolute;
         margin-left: 10px;
     }
+    &__spanicon {
+        top: 10px;
+        right: 10px;
+        height: 20px;
+        width: 20px !important;
+        color: #ba0b66;
+        position: absolute;
+        margin-left: 10px;
+        display: none;
+    }
     &__num {
         font-family: fantasy;
         color: white;
@@ -145,8 +155,27 @@
         height: 30px;
         width: 30px;
         position: absolute;
-        cursor: pointer;
         margin-left: 5px;
+        z-index: 100;
+        cursor: pointer;
+        &:hover {
+            & span {
+                display: none;
+            }
+            // &:after {
+            //     content: 'x';
+            //     font-family: Sans;
+            //     font-size: 20px;
+            //     font-weight: 600;
+            //     color: #ba0b66;
+            // }
+        }
+    }
+    &__num:hover~&__spanicon {
+        display: inline-block !important;
+    }
+    &__num:hover~&__icon {
+        display: none;
     }
 }
 
