@@ -20,7 +20,9 @@ class Header extends Component {
           value={this.props.title}
           onChange={e => this.props.handleSetTitle(e.target.value)}
         />
-        <button className='header__save'>Save</button>
+        <button className='header__save' onClick={this.props.handleSave}>
+          Save
+        </button>
       </div>
     );
   }

@@ -2,7 +2,6 @@ import { RichUtils } from 'draft-js';
 
 export function handleKeyCommand(command) {
   const { editorState } = this.props;
-  console.log(editorState);
   const newState = RichUtils.handleKeyCommand(editorState, command);
   if (newState) {
     this.props.handleDocChange(newState);

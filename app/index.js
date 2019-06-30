@@ -8,6 +8,7 @@ import { getCursorStyle } from '../src/Editor/getCursorStyle';
 
 import { EditorState, convertToRaw } from 'draft-js';
 import debounce from 'debounce';
+import axios from 'axios';
 
 //let host = process.env.NODE_ENV !== 'production'
 //  ? 'ws://' + window.document.location.host.replace(/:.*/, '') + ':1234'
@@ -127,7 +128,17 @@ class App extends React.Component {
       })
     );
   };
-
+  handleSave = () => {
+    let { editorState } = this.state;
+    let contentState = editorState.getCurrentContent();
+    let raw = convertToRaw(contentState);
+    axios.post('/doc', {
+      docId: 2,
+      doc: raw,
+      title: this.state.title,
+      userAddPlaces: this.state.userAddPlaces
+    });
+  };
   render() {
     if (!this.state.userId) return false;
     return (
@@ -144,6 +155,7 @@ class App extends React.Component {
           editorState={this.state.editorState}
           title={this.state.title}
           handleSetTitle={this.handleSetTitle}
+          handleSave={this.handleSave}
         />
         <TravMap
           handleAddPlaces={this.handleAddPlaces}

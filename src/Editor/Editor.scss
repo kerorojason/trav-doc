@@ -9,7 +9,8 @@
     box-sizing: border-box;
     height: 95vh;
     width: 50%;
-    overflow-y: scroll;
+    // overflow-y: scroll;
+    overflow-y: overlay;
   }
 
   &-editor {

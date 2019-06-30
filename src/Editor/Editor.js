@@ -118,6 +118,7 @@ class CollaborativeEditor extends React.Component {
   render() {
     const { cursors } = this.state;
     const {
+      handleSave,
       editorState,
       ws,
       title,
@@ -144,7 +145,12 @@ class CollaborativeEditor extends React.Component {
 
     return (
       <div className='Editor-root'>
-        <Header ws={ws} title={title} handleSetTitle={handleSetTitle} />
+        <Header
+          ws={ws}
+          title={title}
+          handleSetTitle={handleSetTitle}
+          handleSave={handleSave}
+        />
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}

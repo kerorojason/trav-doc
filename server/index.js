@@ -7,6 +7,11 @@ const session = require('express-session');
 const PORT = process.env.PORT || 1234;
 const genID = require('./genID');
 
+require('dotenv').config();
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+
 const app = express();
 // app.use(require('cookie-parser')())
 app.use(
@@ -21,6 +26,11 @@ app.use(
     }
   })
 );
+const docSchema = new Schema({}, { strict: false });
+mongoose.model('docs', docSchema);
+
+app.use(bodyParser.json());
+require('./routes/docRoute')(app);
 
 if (process.env.NODE_ENV !== 'production') {
   const Bundler = require('parcel-bundler');
@@ -30,7 +40,6 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(express.static('dist'));
 }
 
-app.use(bodyParser.json());
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
