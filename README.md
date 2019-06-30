@@ -5,7 +5,7 @@ A collaborative platform for peolple to plan their trip together with rich text 
 
 ## Deploy & Demo Link
 - Deploy: https://travel-doc.herokuapp.com/
-- Demo Video: 後補
+- Demo Video: https://www.wevideo.com/view/1423813265
 - GitHub: https://github.com/kerorojason/trav-doc
 
 
