@@ -1,28 +1,30 @@
-import React, { Component, Fragment } from "react";
-import InfoWindow from "./InfoWindow";
-import PropTypes from "prop-types";
+import React, { Component, Fragment } from 'react';
+import InfoWindow from './InfoWindow';
+import PropTypes from 'prop-types';
 // Icon
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Marker component
 const AddMarker = props => {
   const markerStyle = {
-    height: "25px",
-    width: "25px",
-    color: props.show ? "#c73a30" : "#239985",
-    cursor: "pointer",
+    top: '-13px',
+    left: '-13px',
+    height: '26px',
+    width: '26px',
+    color: props.show ? '#c73a30' : '#239985',
+    cursor: 'pointer',
     zIndex: 10,
-    position: "absolute",
-    border: "1px",
-    borderColor: "white"
+    position: 'absolute',
+    border: '1px',
+    borderColor: 'white'
   };
 
   return (
     <Fragment>
-      {/* <div style={markerStyle} /> */}
-      <FontAwesomeIcon icon={faMapMarkerAlt} style={markerStyle} />
-      {props.show && <InfoWindow place={props.place} useradd={props.useradd} />}{" "}
+      {' '}
+      {/* <div style={markerStyle} /> */} <FontAwesomeIcon icon={faMapMarkerAlt} style={markerStyle} />{' '}
+      {props.show && <InfoWindow place={props.place} useradd={props.useradd} />}{' '}
     </Fragment>
   );
 };
