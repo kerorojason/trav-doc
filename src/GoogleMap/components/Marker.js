@@ -26,7 +26,7 @@ const Wrapper = styled.div`
 const Marker = props => {
   return (
     // <Wrapper alt={props.text} {...(props.onClick ? { onClick: props.onClick } : {})}>
-    <div style={{ height: '30px', width: '30px', position: 'relative' }}>
+    <div style={{ top: '-15px', left: '-15px', height: '30px', width: '30px', position: 'absolute' }}>
       <FontAwesomeIcon
         icon={faMapMarker}
         style={{
@@ -37,7 +37,7 @@ const Marker = props => {
           color: '#ba0b66',
           position: 'absolute'
         }}
-      />
+      />{' '}
       <div
         style={{
           fontFamily: 'fantasy',
@@ -50,8 +50,9 @@ const Marker = props => {
           position: 'absolute'
         }}
       >
-        {props.index + 1}
-      </div>
+        {' '}
+        {props.index + 1}{' '}
+      </div>{' '}
     </div>
     //</Wrapper>
   );
