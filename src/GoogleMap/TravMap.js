@@ -155,15 +155,21 @@ class TravMap extends Component {
 
   userAddclear = index => {
     const addIndex = this.props.userAddPlaces;
-    addIndex.splice(index, 1);
-    this.props.handleAddPlaces(addIndex);
-    console.log(addIndex)
-    const modify =addIndex
+    const modify = addIndex[index]
     const st=this.state.startEndPlaces
+    console.log(this.state.startEndPlaces)
+    console.log(modify.place_id)
+
     if(st.includes(modify.place_id)){
       st.splice(st.indexOf(modify.place_id),1)
       this.setState({startEndPlaces:st})
+      console.log(this.state.startEndPlaces)
     }
+
+    addIndex.splice(index, 1);
+    this.props.handleAddPlaces(addIndex);
+
+
     // this.setState({ userAddPlaces: addIndex });
   };
   // 使用者添加自定義地點於地圖列表中

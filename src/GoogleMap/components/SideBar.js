@@ -33,7 +33,7 @@ const SideBar = ({ places, select, stEnd, direction, userAddclear }) => {
           }
         }}
       >
-        <div className='sidebar-list__num' onClick={i => userAddclear(i)}>
+        <div className='sidebar-list__num' onClick={e => userAddclear(i)}>
           <span className='sidebar-list__span'>{i + 1}</span>
         </div>
         <FontAwesomeIcon icon={faTimes} className='sidebar-list__spanicon' />
