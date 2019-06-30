@@ -11,7 +11,7 @@ const SideBar = ({ places, select, stEnd, direction, userAddclear }) => {
   var writeDirection = false;
   var j = 0;
   for (let i = 0; i < places.length; i++) {
-    if (places[i].place_id == start) {
+    if (places.some(e=>(e.place_id==end)) && places[i].place_id == start) {
       writeDirection = true;
     }
     if (places[i].place_id == end) {

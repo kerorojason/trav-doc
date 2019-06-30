@@ -60,6 +60,7 @@
     "react": "^16.8.6",
     "react-dom": "~16.4.0",
     "react-native-action-button": "^2.8.5",
+    "reactstrap": "^8.0.0",
     "socket.io": "^2.2.0",
     "styled-components": "^4.3.1",
     "suspend-button": "^0.1.1",

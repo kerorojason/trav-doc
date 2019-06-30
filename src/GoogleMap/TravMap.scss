@@ -1,203 +1,205 @@
 .TravMap_div {
-  width: 50%;
-  height: 95vh;
-  position: relative;
-  overflow: hidden;
+    width: 50%;
+    height: 95vh;
+    position: relative;
+    overflow: hidden;
 }
 
 .SearchBox_div {
-  height: 60px;
-  right: 0px;
-  width: 100%;
-  align-items: center;
-  display: flex;
-  flex-direction: column-reverse;
-  position: absolute;
-  justify-content: center;
-  z-index: 2;
+    height: 60px;
+    right: 0px;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column-reverse;
+    position: absolute;
+    justify-content: center;
+    z-index: 2;
 }
 
 .SearchBox_input {
-  width: 90%;
-  height: 35px;
-  outline: 0;
-  border: none;
-  border-radius: 90px;
-  box-shadow: 1px 1px 2px #a8a7a7;
-  padding-left: 10px;
-  font-size: 13px;
+    width: 90%;
+    height: 35px;
+    outline: 0;
+    border: none;
+    border-radius: 90px;
+    box-shadow: 1px 1px 2px #a8a7a7;
+    padding-left: 10px;
+    font-size: 13px;
 }
 
 .SearchBox_del {
-  color: gray;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
+    color: gray;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
 }
 
 .SearchBox_del:hover {
-  color: #3d3b3b;
+    color: #3d3b3b;
 }
 
 .SearchBox_del {
-  color: gray;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
+    color: gray;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
 }
 
 .SearchBox_del:hover {
-  color: #3d3b3b;
+    color: #3d3b3b;
 }
 
 .Button {
-  height: 40px;
-  width: 40px;
-  border-radius: 2px;
-  user-select: none;
-  cursor: pointer;
-  border: 0px;
-  margin: 0px;
-  padding: 0px;
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  display: flex;
-  flex-direction: column-reverse;
-  z-index: 2;
-  background-color: #ffffff;
-  box-shadow: 1px 1px 2px #a8a7a7;
-  transition: all 0.25s;
+    height: 40px;
+    width: 40px;
+    border-radius: 2px;
+    user-select: none;
+    cursor: pointer;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 2;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 2px #a8a7a7;
+    transition: all 0.25s;
 }
 
 .Button:focus {
-  outline: 0;
-  border: none;
+    outline: 0;
+}
+
+.Button__select {
+    border: blue 2px solid;
 }
 
 .Button--open {
-  left: 40%;
+    left: 40%;
 }
 
 .sidebar {
-  height: 100%;
-  width: 40%;
-  position: absolute;
-  right: 100%;
-  top: 0px;
-  border: 0px;
-  margin: 0px;
-  padding: 0px;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  //align-items: center;
-  z-index: 2;
-  background-color: rgba(0, 0, 0, 0.6);
-  transition: all 0.25s;
+    height: 100%;
+    width: 40%;
+    position: absolute;
+    right: 100%;
+    top: 0px;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    //align-items: center;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.6);
+    transition: all 0.25s;
 }
 
 .sidebar--open {
-  transform: translateX(100%);
-  overflow-y: auto;
+    transform: translateX(100%);
+    overflow-y: auto;
 }
 
 .sidebar-list {
-  overflow: hidden;
-  position: absolute;
-  z-index: 2;
-  top: 60px;
-  width: 100%;
-  border: 0px;
-  margin: 0px;
-  padding: 0px;
-  font-family: 'Noto Sans TC', sans-serif;
-
-  &__item {
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin: 5px 5px 8px 5px !important;
-    border-radius: 5px;
-    padding: 3px 5px;
-    &:hover {
-      transform: scale(1.02);
+    overflow: hidden;
+    position: absolute;
+    z-index: 2;
+    top: 60px;
+    width: 100%;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Noto Sans TC', sans-serif;
+    &__item {
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.8);
+        margin: 5px 5px 8px 5px !important;
+        border-radius: 5px;
+        padding: 3px 5px;
+        &:hover {
+            transform: scale(1.02);
+        }
+        &--select {
+            border: blue 2px solid;
+        }
     }
-    &--select {
-      border: blue 2px solid;
+    &__header {
+        font-size: 20px;
+        margin: 5px 15px 5px 0;
     }
-  }
-  &__header {
-    font-size: 20px;
-    margin: 5px 15px 5px 0;
-  }
-  &__img {
-    display: inline-block;
-    height: 25px;
-    width: 25px;
-    background-size: cover;
-    vertical-align: sub;
-    margin-right: 5px;
-  }
-  &__addr {
-    margin: 2px;
-    font-size: 11px;
-  }
-  &__icon {
-    top: 5px;
-    right: 5px;
-    height: 30px;
-    width: 30px !important;
-    color: #ba0b66;
-    position: absolute;
-    margin-left: 10px;
-  }
-  &__spanicon {
-    top: 10px;
-    right: 10px;
-    height: 20px;
-    width: 20px !important;
-    color: #ba0b66;
-    position: absolute;
-    margin-left: 10px;
-    display: none;
-  }
-  &__num {
-    font-family: fantasy;
-    color: white;
-    text-align: center;
-    top: 7px;
-    right: 5px;
-    height: 30px;
-    width: 30px;
-    position: absolute;
-    margin-left: 5px;
-    z-index: 100;
-    cursor: pointer;
-    &:hover {
-      & span {
+    &__img {
+        display: inline-block;
+        height: 25px;
+        width: 25px;
+        background-size: cover;
+        vertical-align: sub;
+        margin-right: 5px;
+    }
+    &__addr {
+        margin: 2px;
+        font-size: 11px;
+    }
+    &__icon {
+        top: 5px;
+        right: 5px;
+        height: 30px;
+        width: 30px !important;
+        color: #ba0b66;
+        position: absolute;
+        margin-left: 10px;
+    }
+    &__spanicon {
+        top: 10px;
+        right: 10px;
+        height: 20px;
+        width: 20px !important;
+        color: #ba0b66;
+        position: absolute;
+        margin-left: 10px;
         display: none;
-      }
-      // &:after {
-      //     content: 'x';
-      //     font-family: Sans;
-      //     font-size: 20px;
-      //     font-weight: 600;
-      //     color: #ba0b66;
-      // }
     }
-  }
-  &__num:hover ~ &__spanicon {
-    display: inline-block !important;
-  }
-  &__num:hover ~ &__icon {
-    display: none;
-  }
+    &__num {
+        font-family: fantasy;
+        color: white;
+        text-align: center;
+        top: 7px;
+        right: 5px;
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        margin-left: 5px;
+        z-index: 100;
+        cursor: pointer;
+        &:hover {
+            & span {
+                display: none;
+            }
+            // &:after {
+            //     content: 'x';
+            //     font-family: Sans;
+            //     font-size: 20px;
+            //     font-weight: 600;
+            //     color: #ba0b66;
+            // }
+        }
+    }
+    &__num:hover~&__spanicon {
+        display: inline-block !important;
+    }
+    &__num:hover~&__icon {
+        display: none;
+    }
 }
 
 .Icon_slide {
-  color: gray;
+    color: gray;
 }
 
 .Icon_slide:hover {
-  color: #3d3b3b;
+    color: #3d3b3b;
 }
