@@ -55,7 +55,7 @@
     "is-plain-object": "^2.0.4",
     "jsondiffpatch": "^0.3.10",
     "lodash.isempty": "^4.4.0",
-    "mongoose": "^5.6.2",
+    "mongoose": "^5.7.5",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "~16.4.0",
