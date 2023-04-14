@@ -4,9 +4,9 @@
 A collaborative platform for peolple to plan their trip together with rich text editor and Google Map.
 
 ## Deploy & Demo Link
-- Deploy: https://travel-doc.herokuapp.com/
-- Demo Video: https://www.wevideo.com/view/1423813265
-- GitHub: https://github.com/kerorojason/trav-doc
+- [Deploy](https://travel-doc.herokuapp.com/)
+- [Demo Video](https://drive.google.com/file/d/13hnZel38zZ2WXki5YOhUFhDJvuSwecne/view?usp=sharing)
+- [GitHub](https://github.com/kerorojason/trav-doc)
 
 
 ## How to Use
